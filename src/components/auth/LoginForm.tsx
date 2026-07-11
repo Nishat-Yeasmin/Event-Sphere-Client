@@ -7,13 +7,19 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
-
+import axios from "axios";
 import { loginSchema } from "@/lib/validations/auth.schema";
 import { LoginFormData } from "@/types/auth";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthProvider";
+
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { getCurrentUser } = useAuth();
+
 
   const {
     register,
@@ -25,15 +31,52 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (data: LoginFormData) => {
+
+  try {
+
     setLoading(true);
 
-    console.log(data);
+    const response = await axios.post(
+      "http://localhost:5000/api/auth/login",
+      {
+        email: data.email,
+        password: data.password,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+    
+   
+    toast.success(response.data.message);
+    await getCurrentUser();
+   router.push("/dashboard");
+    console.log(response.data);
 
-    setTimeout(() => {
-      toast.success("Frontend validation completed.");
-      setLoading(false);
-    }, 1000);
-  };
+  } catch (error: unknown) {
+
+    console.log(error);
+
+    if (axios.isAxiosError(error)) {
+
+      toast.error(
+        error.response?.data?.message ||
+        "Login failed"
+      );
+
+    } else {
+
+      toast.error("Something went wrong");
+
+    }
+
+  } finally {
+
+    setLoading(false);
+
+  }
+
+};
 
   const handleDemoLogin = () => {
     setValue("email", "demo@eventsphere.com");

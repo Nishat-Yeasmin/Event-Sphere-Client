@@ -1,128 +1,320 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import {
+  CalendarDays,
+  LayoutDashboard,
+  LogIn,
+  LogOut,
+  Menu,
+  PlusCircle,
+  User,
+  X,
+} from "lucide-react";
 import { useState } from "react";
-import { HiOutlineBars3BottomRight } from "react-icons/hi2";
-import { IoClose } from "react-icons/io5";
+import { useAuth } from "@/context/AuthProvider";
+import toast from "react-hot-toast";
 
-import Container from "../Container";
-import Logo from "../Logo";
-import Button from "../Button";
+export default function Navbar() {
 
-const navLinks = [
-  {
-    name: "Home",
-    href: "/",
-  },
-  {
-    name: "Explore Events",
-    href: "/events",
-  },
-  {
-    name: "About",
-    href: "/about",
-  },
-  {
-    name: "Contact",
-    href: "/contact",
-  },
-];
-
-const Navbar = () => {
   const [open, setOpen] = useState(false);
 
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const { user, logout } = useAuth();
+
+
+  const handleLogout = async () => {
+
+    await logout();
+
+    toast.success("Logout successful");
+
+    router.push("/");
+
+  };
+
+
+  const publicLinks = [
+    {
+      name: "Home",
+      path: "/",
+    },
+    {
+      name: "Events",
+      path: "/events",
+    },
+    {
+      name: "About",
+      path: "/about",
+    },
+    {
+      name: "Contact",
+      path: "/contact",
+    },
+  ];
+
+
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
-      <Container>
-        <div className="flex items-center justify-between h-20">
+    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b">
 
-          {/* Logo */}
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
 
-          <Logo />
 
-          {/* Desktop Menu */}
+        {/* Logo */}
 
-          <nav className="hidden md:flex items-center gap-8">
-            {navLinks.map((item) => (
+        <Link
+          href="/"
+          className="flex items-center gap-2 text-xl font-bold text-violet-600"
+        >
+
+          <CalendarDays size={28}/>
+
+          EventSphere
+
+        </Link>
+
+
+
+        {/* Desktop Menu */}
+
+        <div className="hidden md:flex items-center gap-8">
+
+          {
+            publicLinks.map((link)=>(
+
               <Link
-                key={item.name}
-                href={item.href}
-                className="text-gray-700 hover:text-violet-600 transition font-medium"
+                key={link.path}
+                href={link.path}
+                className={`transition ${
+                  pathname === link.path
+                  ? "text-violet-600 font-semibold"
+                  : "text-gray-600 hover:text-violet-600"
+                }`}
               >
-                {item.name}
+
+                {link.name}
+
               </Link>
-            ))}
-          </nav>
 
-          {/* Desktop Buttons */}
+            ))
+          }
 
-          <div className="hidden md:flex items-center gap-3">
 
-            <Link href="/login">
-              <Button className="bg-transparent text-violet-600 border border-violet-600 hover:bg-violet-50">
-                Login
-              </Button>
-            </Link>
+          {
+            user ? (
 
-            <Link href="/register">
-              <Button>
-                Register
-              </Button>
-            </Link>
+              <div className="flex items-center gap-4">
 
-          </div>
 
-          {/* Mobile Menu Button */}
+                <Link
+                  href="/dashboard"
+                  className="flex items-center gap-2 text-gray-700 hover:text-violet-600"
+                >
 
-          <button
-            onClick={() => setOpen(!open)}
-            className="md:hidden text-3xl text-violet-600"
-          >
-            {open ? <IoClose /> : <HiOutlineBars3BottomRight />}
-          </button>
+                  <LayoutDashboard size={18}/>
+
+                  Dashboard
+
+                </Link>
+
+
+                <Link
+                  href="/events/add"
+                  className="flex items-center gap-2 text-gray-700 hover:text-violet-600"
+                >
+
+                  <PlusCircle size={18}/>
+
+                  Add Event
+
+                </Link>
+
+
+
+                <div className="flex items-center gap-2 rounded-full bg-violet-50 px-4 py-2">
+
+                  <User size={18}
+                    className="text-violet-600"
+                  />
+
+                  <span className="text-sm font-medium">
+                    {user.name}
+                  </span>
+
+                </div>
+
+
+
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 text-white hover:bg-violet-700"
+                >
+
+                  <LogOut size={18}/>
+
+                  Logout
+
+                </button>
+
+
+              </div>
+
+
+            ) : (
+
+              <div className="flex items-center gap-3">
+
+
+                <Link
+                  href="/login"
+                  className="flex items-center gap-2 rounded-xl border border-violet-600 px-4 py-2 text-violet-600 hover:bg-violet-50"
+                >
+
+                  <LogIn size={18}/>
+
+                  Login
+
+                </Link>
+
+
+
+                <Link
+                  href="/register"
+                  className="rounded-xl bg-violet-600 px-4 py-2 text-white hover:bg-violet-700"
+                >
+
+                  Register
+
+                </Link>
+
+
+              </div>
+
+            )
+          }
+
 
         </div>
 
-        {/* Mobile Menu */}
 
-        {open && (
-          <div className="md:hidden pb-6">
 
-            <div className="flex flex-col gap-5">
+        {/* Mobile Button */}
 
-              {navLinks.map((item) => (
+        <button
+          className="md:hidden"
+          onClick={()=>setOpen(!open)}
+        >
+
+          {
+            open ?
+            <X/>
+            :
+            <Menu/>
+          }
+
+        </button>
+
+
+      </nav>
+
+
+
+
+      {/* Mobile Menu */}
+
+      {
+        open && (
+
+          <motion.div
+            initial={{
+              opacity:0,
+              y:-20
+            }}
+            animate={{
+              opacity:1,
+              y:0
+            }}
+            className="md:hidden border-t bg-white px-5 py-5 space-y-4"
+          >
+
+
+            {
+              publicLinks.map((link)=>(
+
                 <Link
-                  key={item.name}
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className="text-gray-700 hover:text-violet-600"
+                  key={link.path}
+                  href={link.path}
+                  onClick={()=>setOpen(false)}
+                  className="block text-gray-700"
                 >
-                  {item.name}
+
+                  {link.name}
+
                 </Link>
-              ))}
 
-              <Link href="/login">
-                <Button
-                  className="w-full bg-transparent text-violet-600 border border-violet-600 hover:bg-violet-50"
+              ))
+            }
+
+
+            {
+              user ? (
+
+                <>
+
+                <Link
+                  href="/dashboard"
+                  className="block"
                 >
+                  Dashboard
+                </Link>
+
+
+                <Link
+                  href="/events/add"
+                  className="block"
+                >
+                  Add Event
+                </Link>
+
+
+                <button
+                  onClick={handleLogout}
+                  className="rounded-xl bg-violet-600 px-4 py-2 text-white"
+                >
+                  Logout
+                </button>
+
+                </>
+
+
+              ) : (
+
+                <>
+
+                <Link href="/login">
                   Login
-                </Button>
-              </Link>
+                </Link>
 
-              <Link href="/register">
-                <Button className="w-full">
+                <Link href="/register">
                   Register
-                </Button>
-              </Link>
+                </Link>
 
-            </div>
+                </>
 
-          </div>
-        )}
+              )
+            }
 
-      </Container>
+
+          </motion.div>
+
+        )
+      }
+
+
     </header>
   );
-};
-
-export default Navbar;
+}
