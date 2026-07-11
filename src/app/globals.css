@@ -1,2 +1,19 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #fafafc;
+  color: #111827;
+}
+
+section {
+  padding: 80px 0;
+}
+
+button {
+  cursor: pointer;
+}
