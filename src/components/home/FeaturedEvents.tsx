@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   CalendarDays,
@@ -12,276 +13,371 @@ import {
 import Container from "@/components/shared/Container";
 import SectionTitle from "@/components/shared/SectionTitle";
 import Button from "@/components/shared/Button";
+import api from "@/lib/axios";
 
 
-const events = [
-  {
-    id: 1,
-    title: "Tech Innovation Summit 2026",
-    image: "/images/tech-event.jpg",
-    category: "Technology",
-    date: "25 July 2026",
-    location: "Dhaka",
-    price: 500,
-  },
+interface EventType {
 
-  {
-    id: 2,
-    title: "Music Festival Night",
-    image: "/images/music-event.jpg",
-    category: "Music",
-    date: "10 August 2026",
-    location: "Sylhet",
-    price: 800,
-  },
+  _id:string;
 
-  {
-    id: 3,
-    title: "Business Networking Event",
-    image: "/images/business-event.jpg",
-    category: "Business",
-    date: "18 August 2026",
-    location: "Chittagong",
-    price: 1000,
-  },
+  title:string;
 
-  {
-    id: 4,
-    title: "Modern Web Development Workshop",
-    image: "/images/workshop.jpg",
-    category: "Workshop",
-    date: "05 September 2026",
-    location: "Dhaka",
-    price: 300,
-  },
+  image:string;
 
-  {
-    id: 5,
-    title: "National Sports Championship",
-    image: "/images/sports-event.jpg",
-    category: "Sports",
-    date: "20 September 2026",
-    location: "Rajshahi",
-    price: 400,
-  },
+  category:string;
 
-  {
-    id: 6,
-    title: "Cultural Festival 2026",
-    image: "/images/cultural-event.jpg",
-    category: "Culture",
-    date: "12 October 2026",
-    location: "Sylhet",
-    price: 200,
-  },
-];
+  date:string;
+
+  location:string;
+
+  price:number;
+
+}
+
 
 
 const FeaturedEvents = () => {
 
-  return (
 
-    <section className="bg-purple-100">
+const [events,setEvents] = useState<EventType[]>([]);
 
-      <Container>
-
-
-        <SectionTitle
-
-          title="Upcoming Events"
-
-          subtitle="Discover exciting events, workshops and experiences happening around you."
-
-        />
+const [loading,setLoading] = useState(true);
 
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+useEffect(()=>{
 
 
-          {
-            events.map((event,index)=>(
+const fetchEvents = async()=>{
+
+try{
 
 
-              <motion.div
+const res = await api.get(
+  "/api/events"
+);
 
-                key={event.id}
 
-                initial={{
-                  opacity:0,
-                  y:40
-                }}
+setEvents(
+  res.data.events.slice(0,6)
+);
 
-                whileInView={{
-                  opacity:1,
-                  y:0
-                }}
 
-                transition={{
-                  duration:0.5,
-                  delay:index*0.1
-                }}
 
-                viewport={{
-                  once:true
-                }}
+}catch(error){
+
+console.log(error);
+
+
+}finally{
+
+setLoading(false);
+
+}
+
+
+};
+
+
+fetchEvents();
+
+
+},[]);
+
+
+
+
+return (
+
+<section className="bg-purple-100 py-20">
+
+
+<Container>
+
+
+<SectionTitle
+
+title="Upcoming Events"
+
+subtitle="Discover exciting events, workshops and experiences happening around you."
+
+/>
+
+
+
+{
+loading ? (
+
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+
+{
+[1,2,3].map((item)=>(
+
+<div
+key={item}
+className="h-[450px] rounded-2xl bg-gray-200 animate-pulse"
+/>
+
+))
+}
+
+
+</div>
+
+
+)
+
+:
+
+(
+
+
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+
+{
+
+events.map((event,index)=>(
+
+
+<motion.div
+
+
+key={event._id}
+
+
+initial={{
+
+opacity:0,
+
+y:40
+
+}}
+
+
+whileInView={{
+
+opacity:1,
+
+y:0
+
+}}
+
+
+transition={{
+
+duration:0.5,
+
+delay:index*0.1
+
+}}
+
+
+viewport={{
+
+once:true
+
+}}
+
 
 className="group bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
 
-              >
 
+>
 
-                {/* Image */}
 
-                <div className="relative h-60 overflow-hidden">
 
+{/* Image */}
 
-                  <Image
 
-                    src={event.image}
+<div className="relative h-60 overflow-hidden">
 
-                    alt={event.title}
 
-                    fill
+<Image
 
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+src={event.image}
 
-                  />
+alt={event.title}
 
+fill
 
-                  <div
-                    className="absolute top-4 left-4 bg-violet-600 text-white px-4 py-1 rounded-full text-sm font-medium"
-                  >
+className="object-cover group-hover:scale-110 transition-transform duration-500"
 
-                    {event.category}
+/>
 
-                  </div>
 
 
-                </div>
+<div className="absolute top-4 left-4 bg-violet-600 text-white px-4 py-1 rounded-full text-sm font-medium">
 
+{event.category}
 
+</div>
 
-                {/* Content */}
 
 
-                <div className="p-6">
+</div>
 
 
-                  <h3 className="text-xl font-bold text-gray-900 line-clamp-1"
-                  >
 
-                    {event.title}
 
-                  </h3>
 
+{/* Content */}
 
 
-                  <div className="mt-4 space-y-3 text-gray-600 text-sm">
+<div className="p-6">
 
 
-                    <div className="flex items-center gap-2">
+<h3 className="text-xl font-bold text-gray-900 line-clamp-1">
 
-                      <CalendarDays
-                        size={18}
-                        className="text-violet-600"
-                      />
+{event.title}
 
-                      <span>
-                        {event.date}
-                      </span>
+</h3>
 
-                    </div>
 
 
 
-                    <div className="flex items-center gap-2">
+<div className="mt-4 space-y-3 text-gray-600 text-sm">
 
 
-                      <MapPin
-                        size={18}
-                        className="text-violet-600"
-                      />
+<div className="flex items-center gap-2">
 
+<CalendarDays
 
-                      <span>
-                        {event.location}
-                      </span>
+size={18}
 
+className="text-violet-600"
 
-                    </div>
+/>
 
 
-                  </div>
+<span>
 
+{event.date}
 
+</span>
 
-                  <div className="flex items-center justify-between mt-6">
 
+</div>
 
-                    <p className="text-lg font-bold text-violet-600"
-                    >
 
-                      ${event.price}
 
-                    </p>
 
+<div className="flex items-center gap-2">
 
 
-                    <Link
-                      href={`/events/${event.id}`}
-                      className="text-violet-600 font-medium flex items-center gap-1 hover:gap-2 transition-all"
-                    >
+<MapPin
 
-                      Details
+size={18}
 
-                      <ArrowRight size={18}/>
+className="text-violet-600"
 
-                    </Link>
+/>
 
 
-                  </div>
+<span>
 
+{event.location}
 
-                </div>
+</span>
 
 
-              </motion.div>
+</div>
 
 
-            ))
-          }
 
+</div>
 
-        </div>
 
 
 
-        {/* Button */}
 
+<div className="flex items-center justify-between mt-6">
 
-        <div className="flex justify-center mt-12">
 
+<p className="text-lg font-bold text-violet-600">
 
-          <Link href="/events">
+${event.price}
 
-            <Button>
+</p>
 
-              View All Events
 
-            </Button>
 
-          </Link>
 
+<Link
 
-        </div>
+href={`/events/${event._id}`}
 
+className="text-violet-600 font-medium flex items-center gap-1 hover:gap-2 transition-all"
 
-      </Container>
+>
 
 
-    </section>
+Details
 
-  );
+
+<ArrowRight size={18}/>
+
+
+</Link>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</motion.div>
+
+
+
+))
+
+}
+
+
+
+</div>
+
+
+)
+
+}
+
+
+
+
+<div className="flex justify-center mt-12">
+
+
+<Link href="/events">
+
+
+<Button>
+
+View All Events
+
+</Button>
+
+
+</Link>
+
+
+</div>
+
+
+
+</Container>
+
+
+</section>
+
+);
+
 
 };
 

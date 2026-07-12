@@ -31,6 +31,11 @@ export const registerSchema = z.object({
   confirmPassword: z
     .string(),
 
+    role: z.enum([
+  "user",
+  "organizer",
+]),
+
 }).refine(
 
 (data)=>data.password===data.confirmPassword,

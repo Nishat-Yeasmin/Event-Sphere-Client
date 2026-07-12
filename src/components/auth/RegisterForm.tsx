@@ -26,6 +26,10 @@ export default function RegisterForm() {
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
+      defaultValues: {
+    role: "user",
+  },
+
   });
 
 
@@ -43,6 +47,7 @@ export default function RegisterForm() {
         name: data.name,
         email: data.email,
         password: data.password,
+        role: data.role,
       }
     );
 
@@ -380,7 +385,39 @@ export default function RegisterForm() {
       </div>
 
 
+{/* Role */}
 
+<div>
+
+<label className="mb-2 block font-medium">
+
+Register As
+
+</label>
+
+<select
+
+{...register("role")}
+
+className="w-full cursor-pointer rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-violet-600"
+
+>
+
+<option value="user" className="cursor-pointer">
+
+User
+
+</option>
+
+<option value="organizer" className="cursor-pointer">
+
+Organizer
+
+</option>
+
+</select>
+
+</div>
 
 
       {/* Submit Button */}
