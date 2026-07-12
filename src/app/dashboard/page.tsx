@@ -1,6 +1,6 @@
 "use client";
 
-import AdminDashbaord from "@/components/dashboard/AdminDashbaord";
+import AdminDashboard from "@/components/dashboard/AdminDashbaord";
 import OrganizerDashboard from "@/components/dashboard/OrganizerDashboard";
 import UserDashboard from "@/components/dashboard/UserDashboard";
 import { useAuth } from "@/context/AuthProvider";
@@ -21,7 +21,7 @@ export default function DashboardPage() {
 
   if (user.role === "admin") {
 
-    return <AdminDashbaord/>;
+    return <AdminDashboard/>;
 
   }
 

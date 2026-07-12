@@ -5,19 +5,14 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthProvider";
 
 import {
-
-LayoutDashboard,
-
-CalendarPlus,
-
-CalendarDays,
-
-Ticket,
-
-Users,
-
-BarChart3,
-
+  LayoutDashboard,
+  CalendarPlus,
+  CalendarDays,
+  Ticket,
+  Users,
+  FolderKanban,
+  BookOpenCheck,
+  BarChart3,
 } from "lucide-react";
 
 export default function DashboardSidebar() {
@@ -118,39 +113,66 @@ My Bookings
 
 {user?.role === "admin" && (
 
-<>
+  <>
 
-<Link
-href="/dashboard/users"
-className={`flex items-center gap-3 rounded-xl px-4 py-3 transition ${
-isActive("/dashboard/users")
-? "bg-violet-600 text-white"
-: "hover:bg-violet-100"
-}`}
+    <Link
+      href="/dashboard/manage-users"
+      className={`flex items-center gap-3 rounded-xl px-4 py-3 transition ${
+        isActive("/dashboard/manage-users")
+          ? "bg-violet-600 text-white"
+          : "hover:bg-violet-100"
+      }`}
+    >
+
+      <Users size={20} />
+
+      Manage Users
+
+    </Link>
+
+    <Link
+      href="/dashboard/manage-events"
+      className={`flex items-center gap-3 rounded-xl px-4 py-3 transition ${
+        isActive("/dashboard/manage-events")
+          ? "bg-violet-600 text-white"
+          : "hover:bg-violet-100"
+      }`}
+    >
+
+      <FolderKanban size={20} />
+
+      Manage Events
+
+    </Link>
+
+    <Link
+      href="/dashboard/manage-bookings"
+      className={`flex items-center gap-3 rounded-xl px-4 py-3 transition ${
+        isActive("/dashboard/manage-bookings")
+          ? "bg-violet-600 text-white"
+          : "hover:bg-violet-100"
+      }`}
+    >
+
+      <BookOpenCheck size={20} />
+
+      Manage Bookings
+
+    </Link>
+
+    <Link
+  href="/dashboard/analytics"
+  className={`flex items-center gap-3 rounded-xl px-4 py-3 transition ${
+    isActive("/dashboard/analytics")
+      ? "bg-violet-600 text-white"
+      : "hover:bg-violet-100"
+  }`}
 >
-
-<Users size={20} />
-
-Users
-
+  <BarChart3 size={20} />
+  Analytics
 </Link>
 
-<Link
-href="/dashboard/analytics"
-className={`flex items-center gap-3 rounded-xl px-4 py-3 transition ${
-isActive("/dashboard/analytics")
-? "bg-violet-600 text-white"
-: "hover:bg-violet-100"
-}`}
->
-
-<BarChart3 size={20} />
-
-Analytics
-
-</Link>
-
-</>
+  </>
 
 )}
 

@@ -8,7 +8,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import axios from "axios";
-
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthProvider";
 import { registerSchema } from "@/lib/validations/auth.schema";
 import { RegisterFormData } from "@/types/auth";
 
@@ -18,7 +19,9 @@ export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+const router = useRouter();
 
+const { getCurrentUser } = useAuth();
 
   const {
     register,
@@ -48,12 +51,17 @@ export default function RegisterForm() {
         email: data.email,
         password: data.password,
         role: data.role,
+      },
+      {
+        withCredentials: true,
       }
     );
 
 
     toast.success(response.data.message);
+await getCurrentUser();
 
+router.push("/dashboard");
 
   }catch (error: unknown) {
  console.log(error);

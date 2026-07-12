@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import {
   CalendarDays,
@@ -38,6 +41,11 @@ export default function EventDetailsPage() {
 
   const [loading, setLoading] = useState(true);
 
+  const [bookingLoading, setBookingLoading] = useState(false);
+
+const [booked, setBooked] = useState(false);
+
+
   useEffect(() => {
     const getEvent = async () => {
       try {
@@ -55,6 +63,60 @@ export default function EventDetailsPage() {
       getEvent();
     }
   }, [id]);
+
+const handleBookEvent = async () => {
+
+  try {
+
+    setBookingLoading(true);
+
+    const res = await axios.post(
+
+      `http://localhost:5000/api/book-event/${id}`,
+
+      {},
+
+      {
+        withCredentials: true,
+      }
+
+    );
+
+    toast.success(res.data.message);
+
+    setBooked(true);
+
+    setEvent((prev) =>
+
+      prev
+        ? {
+            ...prev,
+            availableSeats: prev.availableSeats - 1,
+          }
+        : prev
+    );
+
+  } catch (error: unknown) {
+
+    if (axios.isAxiosError(error)) {
+
+      toast.error(
+        error.response?.data?.message || "Booking failed"
+      );
+
+    } else {
+
+      toast.error("Something went wrong");
+
+    }
+
+  } finally {
+
+    setBookingLoading(false);
+
+  }
+
+};
 
   if (loading) {
     return (
@@ -290,18 +352,54 @@ export default function EventDetailsPage() {
 
             <div className="mt-12">
 
-             <motion.button
-  whileHover={{
-    scale: 1.05,
-  }}
-  whileTap={{
-    scale: .95,
-  }}
-  className="rounded-xl bg-violet-600 px-10 py-4 font-semibold text-white shadow-lg transition hover:bg-violet-700"
->
-  Book This Event
-</motion.button>
+<motion.button
+  whileHover={!booked ? { scale: 1.05 } : {}}
+  whileTap={!booked ? { scale: 0.95 } : {}}
+  onClick={handleBookEvent}
+  disabled={
+    bookingLoading ||
+    booked ||
+    event.availableSeats === 0
+  }
+  className={`rounded-xl px-10 py-4 font-semibold text-black shadow-lg transition
 
+  ${
+    booked
+      ? "bg-green-600 cursor-not-allowed"
+      : event.availableSeats === 0
+      ? "bg-gray-500 cursor-not-allowed"
+      : "bg-violet-600 hover:bg-violet-700"
+  }`}
+>
+
+  {bookingLoading ? (
+
+    <span className="flex items-center gap-2">
+
+      <Loader2
+        size={20}
+        className="animate-spin"
+      />
+
+      Booking...
+
+    </span>
+
+  ) : booked ? (
+
+    "Booked Successfully"
+
+  ) : event.availableSeats === 0 ? (
+
+    "No Seats Available"
+
+  ) : (
+
+    "Book This Event"
+
+  )}
+
+</motion.button>
             
 
             </div>
