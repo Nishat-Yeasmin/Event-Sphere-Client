@@ -30,7 +30,7 @@ export default function MyEvents() {
       try {
 
         const res = await axios.get(
-          "http://localhost:5000/api/my-events",
+          "https://event-sphere-server-nu.vercel.app/api/my-events",
           {
             withCredentials: true,
           }
@@ -85,7 +85,7 @@ export default function MyEvents() {
     try{
 
       await axios.delete(
-        `http://localhost:5000/api/events/${id}`,
+        `/api/events/${id}`,
         {
           withCredentials:true,
         }

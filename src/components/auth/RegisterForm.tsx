@@ -45,7 +45,7 @@ const { getCurrentUser } = useAuth();
 
 
     const response = await axios.post(
-      "http://localhost:5000/api/auth/register",
+      "https://event-sphere-server-nu.vercel.app/api/auth/register",
       {
         name: data.name,
         email: data.email,

@@ -42,7 +42,7 @@ export default function AdminDashboard() {
       try {
 
         const res = await axios.get(
-          "http://localhost:5000/api/admin/stats",
+          "https://event-sphere-server-nu.vercel.app/api/admin/stats",
           {
             withCredentials: true,
           }

@@ -37,7 +37,7 @@ export default function LoginForm() {
     setLoading(true);
 
     const response = await axios.post(
-      "http://localhost:5000/api/auth/login",
+      "https://event-sphere-server-nu.vercel.app/api/auth/login",
       {
         email: data.email,
         password: data.password,

@@ -72,7 +72,7 @@ const handleBookEvent = async () => {
 
     const res = await axios.post(
 
-      `http://localhost:5000/api/book-event/${id}`,
+      `https://event-sphere-server-nu.vercel.app/api/book-event/${id}`,
 
       {},
 

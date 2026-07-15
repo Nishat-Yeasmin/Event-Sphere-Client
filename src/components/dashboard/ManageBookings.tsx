@@ -40,7 +40,7 @@ export default function ManageBookings() {
     try {
 
       const res = await axios.get(
-        "http://localhost:5000/api/admin/bookings",
+        "https://event-sphere-server-nu.vercel.app/api/admin/bookings",
         {
           withCredentials: true,
         }
@@ -79,7 +79,7 @@ export default function ManageBookings() {
     try {
 
       const res = await axios.delete(
-        `http://localhost:5000/api/admin/bookings/${id}`,
+        `https://event-sphere-server-nu.vercel.app/api/admin/bookings/${id}`,
         {
           withCredentials: true,
         }

@@ -62,7 +62,7 @@ export default function EventForm() {
 
       const response = await axios.post(
 
-        "http://localhost:5000/api/events",
+        "https://event-sphere-server-nu.vercel.app/api/events",
 
         {
 

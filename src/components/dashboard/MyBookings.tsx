@@ -36,7 +36,7 @@ export default function MyBookings() {
 
       const res = await axios.get(
 
-        "http://localhost:5000/api/my-bookings",
+        "https://event-sphere-server-nu.vercel.app/api/my-bookings",
 
         {
           withCredentials: true,
@@ -78,7 +78,7 @@ export default function MyBookings() {
 
       const res = await axios.delete(
 
-        `http://localhost:5000/api/bookings/${id}`,
+        `https://event-sphere-server-nu.vercel.app/api/bookings/${id}`,
 
         {
           withCredentials: true,

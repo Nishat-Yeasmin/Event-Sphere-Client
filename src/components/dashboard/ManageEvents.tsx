@@ -45,7 +45,7 @@ export default function ManageEvents() {
     try {
 
       const res = await axios.get(
-        "http://localhost:5000/api/admin/events",
+        "https://event-sphere-server-nu.vercel.app/api/admin/events",
         {
           withCredentials: true,
         }
@@ -84,7 +84,7 @@ export default function ManageEvents() {
     try {
 
       const res = await axios.delete(
-        `http://localhost:5000/api/admin/events/${id}`,
+        `https://event-sphere-server-nu.vercel.app/api/admin/events/${id}`,
         {
           withCredentials: true,
         }

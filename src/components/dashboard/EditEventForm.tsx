@@ -70,7 +70,7 @@ try{
 
 const res = await axios.get(
 
-`http://localhost:5000/api/events/${id}`
+`https://event-sphere-server-nu.vercel.app/api/events/${id}`
 
 );
 
@@ -196,7 +196,7 @@ const handleSubmit = async(
 
     await axios.put(
 
-      `http://localhost:5000/api/events/${id}`,
+      `https://event-sphere-server-nu.vercel.app/api/events/${id}`,
 
       updatedFields,
 

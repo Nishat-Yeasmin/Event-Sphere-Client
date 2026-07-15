@@ -20,7 +20,7 @@ export default function ManageUsers() {
   const fetchUsers = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/admin/users",
+        "https://event-sphere-server-nu.vercel.app/api/admin/users",
         {
           withCredentials: true,
         }
@@ -49,7 +49,7 @@ export default function ManageUsers() {
   ) => {
     try {
       const res = await axios.patch(
-        `http://localhost:5000/api/admin/users/${id}/role`,
+        `https://event-sphere-server-nu.vercel.app/api/admin/users/${id}/role`,
         {
           role,
         },
@@ -76,7 +76,7 @@ export default function ManageUsers() {
 
     try {
       const res = await axios.delete(
-        `http://localhost:5000/api/admin/users/${id}`,
+        `https://event-sphere-server-nu.vercel.app/api/admin/users/${id}`,
         {
           withCredentials: true,
         }

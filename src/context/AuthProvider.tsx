@@ -30,7 +30,7 @@ export default function AuthProvider({
   const getCurrentUser = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/auth/me",
+        "https://event-sphere-server-nu.vercel.app/api/auth/me",
         {
           withCredentials: true,
         }
@@ -47,7 +47,7 @@ export default function AuthProvider({
   const logout = async () => {
     try {
       await axios.post(
-        "http://localhost:5000/api/auth/logout",
+        "https://event-sphere-server-nu.vercel.app/api/auth/logout",
         {},
         {
           withCredentials: true,

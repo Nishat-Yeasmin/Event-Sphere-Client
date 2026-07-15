@@ -28,7 +28,7 @@ const fetchStats = async () => {
   try {
 
     const res = await axios.get(
-      "http://localhost:5000/api/dashboard/user-stats",
+      "https://event-sphere-server-nu.vercel.app/api/dashboard/user-stats",
       {
         withCredentials: true,
       }
